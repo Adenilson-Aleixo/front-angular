@@ -1,30 +1,135 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    {{ title }}
-  </h1>  
-</div>
-<div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Email</th>
-        <th>Nome</th>
-        <th>Pefil</th>
-        <th>Habilitado</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let character of users">
-        <td>{{ character.deEmail }}</td>
-        <td>{{ character.noUser }}</td>  
-        <td>{{ character.externalUserFunction.noFunction }}</td>
-        <td>{{ character.icSituation }}</td>
-        <td></td>
-      </tr>
-    </tbody>
-</table>
+<div class="container">
+  <div style="text-align:center">
+    <h1>
+      {{ title }}
+    </h1>  
+  </div>
+  <div class="row">
+      <p (click)="showAddUser()">
+        Parâmetros > Usuários {{ crumb }}
+      </p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      Lista de Usuários
+    </div>
+    <div class="card-body">
+      <form #user = "ngForm" (ngSubmit) = "onClickSubmit(user.value)">
+        <div class="form-inline text-align">
+          <input  class="form-control col-md-6 my-1 mr-sm-2 " type="text" name="noUser" placeholder="Nome" ngModel>
+          <select class="custom-select my-1 mr-sm-2 " name="icSituation" ngModelOptions>
+            <option value="" disabled selected>Situação</option>
+            <option value="A">Ativo</option>
+            <option value="I">Inativo</option>
+          </select>
+
+          <select class="custom-select my-1 mr-sm-2 " name="icUserProfile" ngModelOptions>
+            <option value="" disabled selected>Perfil</option>
+            <option value="0">Aluno</option>
+            <option value="1">Gestor Municipal</option>
+            <option value="2">Gestor Estadual</option>
+            <option value="2">Gestor Nacional</option>
+          </select>
+          <div class="col-md-2">
+            <button class="btn btn-primary btn-sm" type="button">
+              Pesquisar
+            </button>
+          </div>    
+        </div>           
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+      <div class="card-header">
+          <div class="input-group">
+            <input class="btn btn-primary btn-sm col-md-2" type="button" value="{{ addLabel }}" (click)="showAddUser()" />
+            <div class="col-md-4"></div>
+            <select class="custom-select col-md-6">
+              <option selected>10 registros por página</option>
+              <option value="30">30 registros por página</option>
+              <option value="50">50 registros por página</option>
+              <option value="100">100 registros por página</option>
+            </select>
+          </div>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped" *ngIf="!showForm">
+          <thead>
+            <tr>
+              <th>E-mail</th>
+              <th>Nome</th>
+              <th>Pefil</th>
+              <th>Habilitado</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of users">
+              <td>{{ user.deEmail }}</td>
+              <td>{{ user.noUser }}</td>  
+              <td>{{ user.externalUserFunction.noFunction }}</td>
+              <td (click)="disableUser(user)">{{ user.icSituation }}</td>
+              <td>
+                  <button type="button" class="btn btn-primary  btn-sm" (click)="delete(user)">Remover</button>
+              </td>
+            </tr>
+          </tbody>
+          <br />
+          <tfoot>
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
+              <li class="page-item active"><a class="page-link" href="#">1</a></li>
+              <li class="page-item"><a class="page-link" href="#">2</a></li>
+              <li class="page-item"><a class="page-link" href="#">3</a></li>
+              <li class="page-item"><a class="page-link" href="#">Próximo</a></li>
+              </ul>
+          </tfoot>
+        </table>
+
+        <div *ngIf="showForm">
+          <form #form (ngSubmit) = "add(user.value)">
+            <div class="form-inline text-align">
+              <div class="form-group col-md-6">
+                <input type="email" class="form-control col-md-12" name="deEmail" placeholder="E-mail">
+              </div>
+              <div class="form-group col-md-6">
+                <input type="text" class="form-control col-md-12" placeholder="Nome">
+              </div>
+
+              <div class="form-group col-md-3">
+                <input type="text" class="form-control col-md-12 my-1 mr-sm-2" name="nuCpf" placeholder="CPF">
+              </div>
+              <div class="form-group col-md-3">
+                <input type="text" class="form-control col-md-12 my-1 mr-sm-2"name="nuPhone" placeholder="Telefone">
+              </div>
+
+              <div class="form-group col-md-3">
+                  <select class="custom-select col-md-12 my-1 mr-sm-2" name="coFunction">
+                    <option value="" disabled selected>Função</option>
+                    <option value="1">Gestor</option>
+                    <option value="2">Administrador</option>
+                    <option value="2">Frente de Caixa</option>
+                  </select>
+                </div>
+              <div class="form-group col-md-3">
+                <select class="custom-select col-md-12 my-1 mr-sm-2" name="icUserProfile">
+                  <option value="" disabled selected>Perfil</option>
+                  <option value="0">Aluno</option>
+                  <option value="1">Gestor Municipal</option>
+                  <option value="2">Gestor Estadual</option>
+                  <option value="2">Gestor Nacional</option>
+                </select>
+              </div>
+              <div class="form-group col-md-12 my-1 mr-sm-2">
+                <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
+              </div>
+            </div>
+          </form>
+        </div>  
+      </div>
+    </div>
 </div>
 
 
