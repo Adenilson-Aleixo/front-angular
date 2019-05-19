@@ -1,8 +1,12 @@
 export interface User {
-  id: number;
-  name: string;
+  nuCpf: string;
+  deEmail: string;
+  icSituation: string;
+  icUserProfile: number;
+  noUser: string;
+  nuPhone: string;
+  externalUserFunction: object;
 }
-
 
 /*
 Copyright 2017-2018 Google Inc. All Rights Reserved.

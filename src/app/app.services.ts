@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 
-
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 import { User } from './user';
 import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
@@ -12,28 +11,29 @@ import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json',
-    'Authorization': 'my-auth-token'
+    'Access-Control-Allow-Origin': '*'
   })
 };
 
 @Injectable()
 export class UserService {
-  userUrl = 'http://localhost:8080/user';  // URL to web api
+  userUrl = 'http://localhost:8080/user';  // URL to web api  
   private handleError: HandleError;
 
   constructor(
-    private http: HttpClient,
-    httpErrorHandler: HttpErrorHandler) {
-    this.handleError = httpErrorHandler.createHandleError('UserService');
+    private http: HttpClient) {
+  }
+
+  private extractData(res: Response) {
+    let body = res.content;
+    return body || { };
   }
 
   /** GET users from the server */
-  getUsers (): Observable<User[]> {
-    return this.http.get<User[]>(this.userUrl+"/all")
-      .pipe(
-        catchError(this.handleError('getUsers', []))
-      );
-  } 
+  getUsers (): Observable<any> {
+    return this.http.get(this.userUrl + '/all')
+    .pipe(map(this.extractData));    
+  }  
 }
 
 

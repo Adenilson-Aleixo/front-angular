@@ -5,17 +5,23 @@
   </h1>  
 </div>
 <div>
-  <table>
+  <table class="table">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Name</th>
+        <th>Email</th>
+        <th>Nome</th>
+        <th>Pefil</th>
+        <th>Habilitado</th>
+        <th>Ações</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let character of users">
-        <td>{{ character.id }}</td>
-        <td>{{ character.name }}</td>
+        <td>{{ character.deEmail }}</td>
+        <td>{{ character.noUser }}</td>  
+        <td>{{ character.externalUserFunction.noFunction }}</td>
+        <td>{{ character.icSituation }}</td>
+        <td></td>
       </tr>
     </tbody>
 </table>

@@ -6,12 +6,13 @@ import { UserService } from './app.services';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  providers: [ UserService ]
+  providers: [ UserService ],
+  // styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title: 'Usuários';
-  users: User[];
+  title = 'Usuários';
+  users:any = [];
 
   constructor(private userService: UserService) { }
 
@@ -20,7 +21,10 @@ export class AppComponent implements OnInit {
   }
 
   getUsers(): void {
-    this.userService.getUsers()
-      .subscribe(users => this.users = users);
+    let self = this;
+
+      this.userService.getUsers().subscribe((data: {}) => {
+        self.users = data;
+      });
   }
 }
