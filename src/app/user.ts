@@ -6,6 +6,7 @@ export interface User {
   noUser: string;
   nuPhone: string;
   externalUserFunction: object;
+  coFunction: number;
 }
 
 /*

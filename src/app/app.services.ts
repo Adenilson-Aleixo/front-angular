@@ -28,10 +28,16 @@ export class UserService {
     let body = res.content;
     return body || { };
   }
-
-  /** GET users from the server */
+  
   getUsers (): Observable<any> {
-    return this.http.get(this.userUrl + '/all')
+    return this.http.get(this.userUrl + '/all?noUser&onlyEnable&icUserProfile')
+    .pipe(map(this.extractData));    
+  }
+
+  getUsersFilter (user): Observable<any> {
+    console.log(user);
+
+    return this.http.get( `${this.userUrl}/all?noUser=${user.noUser}&onlyEnable=${user.icSituation}&icUserProfile=${user.icUserProfile} `)
     .pipe(map(this.extractData));    
   }
 
@@ -45,10 +51,7 @@ export class UserService {
 
   disableUser (user: User): Observable<{}> {
     const options = user.icSituation === "A" ? false : true;
-    const url = `${this.userUrl}/${user.nuCpf}?onlyEnable=${options}`;
-
-    httpOptions.headers =
-      httpOptions.headers.set('Access-Control-Allow-Origin', '*');
+    const url = `${this.userUrl}/disable/${user.nuCpf}?onlyEnable=${options}`;
 
     return this.http.put(url, {}, httpOptions)
       .pipe(
@@ -57,7 +60,9 @@ export class UserService {
   }
 
   addUser (user: User): Observable<User> {
-    return this.http.post<User>(this.userUrl, user, httpOptions)
+    console.log('User', user);
+    const url = `${this.userUrl}/save`;
+    return this.http.post<User>(url, user, httpOptions)
       .pipe(
         // catchError(this.handleError('addUser', user))
       );

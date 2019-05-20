@@ -15,24 +15,24 @@
       Lista de Usuários
     </div>
     <div class="card-body">
-      <form #user = "ngForm" (ngSubmit) = "onClickSubmit(user.value)">
+      <form #f="ngForm" (ngSubmit)="getUsersFilter(f.value)" novalidate>
         <div class="form-inline text-align">
           <input  class="form-control col-md-6 my-1 mr-sm-2 " type="text" name="noUser" placeholder="Nome" ngModel>
-          <select class="custom-select my-1 mr-sm-2 " name="icSituation" ngModelOptions>
-            <option value="" disabled selected>Situação</option>
+          <select class="custom-select my-1 mr-sm-2 " name="icSituation" ngModel>
+            <option value="" selected>Situação</option>
             <option value="A">Ativo</option>
             <option value="I">Inativo</option>
           </select>
 
-          <select class="custom-select my-1 mr-sm-2 " name="icUserProfile" ngModelOptions>
-            <option value="" disabled selected>Perfil</option>
+          <select class="custom-select my-1 mr-sm-2 " name="icUserProfile" ngModel>
+            <option value="" selected>Perfil</option>
             <option value="0">Aluno</option>
             <option value="1">Gestor Municipal</option>
             <option value="2">Gestor Estadual</option>
             <option value="2">Gestor Nacional</option>
           </select>
           <div class="col-md-2">
-            <button class="btn btn-primary btn-sm" type="button">
+            <button class="btn btn-primary btn-sm" type="submit">
               Pesquisar
             </button>
           </div>    
@@ -69,8 +69,11 @@
             <tr *ngFor="let user of users">
               <td>{{ user.deEmail }}</td>
               <td>{{ user.noUser }}</td>  
-              <td>{{ user.externalUserFunction.noFunction }}</td>
-              <td (click)="disableUser(user)">{{ user.icSituation }}</td>
+              <td>{{ icPerfil[user.icUserProfile] }}</td>
+              <td (click)="disableUser(user)">
+                  <input type="checkbox"  checked data-toggle="toggle" data-size="xs" *ngIf="user.icSituation == 'A' ">
+                  <input type="checkbox"  data-toggle="toggle" data-size="xs" *ngIf="user.icSituation == 'I' ">
+              </td>
               <td>
                   <button type="button" class="btn btn-primary  btn-sm" (click)="delete(user)">Remover</button>
               </td>
@@ -89,24 +92,24 @@
         </table>
 
         <div *ngIf="showForm">
-          <form #form (ngSubmit) = "add(user.value)">
+          <form #f="ngForm" (ngSubmit)="addUser(f.value)">
             <div class="form-inline text-align">
               <div class="form-group col-md-6">
-                <input type="email" class="form-control col-md-12" name="deEmail" placeholder="E-mail">
+                <input type="email" class="form-control col-md-12" name="deEmail" required placeholder="E-mail" ngModel>
               </div>
               <div class="form-group col-md-6">
-                <input type="text" class="form-control col-md-12" placeholder="Nome">
+                <input type="text" class="form-control col-md-12" name="noUser" required placeholder="Nome" ngModel>
               </div>
 
               <div class="form-group col-md-3">
-                <input type="text" class="form-control col-md-12 my-1 mr-sm-2" name="nuCpf" placeholder="CPF">
+                <input type="text" class="form-control col-md-12 my-1 mr-sm-2" name="nuCpf" required placeholder="CPF" ngModel>
               </div>
               <div class="form-group col-md-3">
-                <input type="text" class="form-control col-md-12 my-1 mr-sm-2"name="nuPhone" placeholder="Telefone">
+                <input type="text" class="form-control col-md-12 my-1 mr-sm-2"name="nuPhone" placeholder="Telefone" ngModel>
               </div>
 
               <div class="form-group col-md-3">
-                  <select class="custom-select col-md-12 my-1 mr-sm-2" name="coFunction">
+                  <select class="custom-select col-md-12 my-1 mr-sm-2" name="coFunction" required ngModel>
                     <option value="" disabled selected>Função</option>
                     <option value="1">Gestor</option>
                     <option value="2">Administrador</option>
@@ -114,7 +117,7 @@
                   </select>
                 </div>
               <div class="form-group col-md-3">
-                <select class="custom-select col-md-12 my-1 mr-sm-2" name="icUserProfile">
+                <select class="custom-select col-md-12 my-1 mr-sm-2" name="icUserProfile" required ngModel>
                   <option value="" disabled selected>Perfil</option>
                   <option value="0">Aluno</option>
                   <option value="1">Gestor Municipal</option>
